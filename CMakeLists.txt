@@ -16,6 +16,7 @@ pico_enable_stdio_uart(vrp 0)
 
 target_link_libraries(vrp 
     pico_stdlib
+    pico_multicore
     )
 
 pico_add_extra_outputs(vrp)
