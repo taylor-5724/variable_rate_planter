@@ -9,8 +9,8 @@ unsigned long loops;
 bool debug_loop(repeating_timer_t *rt){
 
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
-    "KHz > %d | RPM > %d"
-    , loops / 250, shaft_speed_get_rpm());
+    "KHz > %d | Motor RPM > %d | Sim RPM > %d "
+    , 0, shaft_speed_get_rpm(4), shaft_speed_get_rpm(2));
 
     loops = 0;
 
@@ -23,12 +23,14 @@ void core1() {
     
     //Generates a frequency for the rpm functions to read
     while (true){
+
+        uint blink_time = 6000;
         bool led_state = !led_state;
         gpio_put(3, led_state);
-        sleep_us(600);
+        sleep_us(blink_time);
         led_state = !led_state;
         gpio_put(3, led_state);
-        sleep_us(600);
+        sleep_us(blink_time);
 
     }
 }
@@ -39,10 +41,11 @@ int main() {
 
     multicore_launch_core1(core1);
 
-    shaft_speed_init(2, 0, 20);
+    shaft_speed_init(2, 2, 20);
+    shaft_speed_init(4, 0, 20);
 
     static repeating_timer_t timer;
-    add_repeating_timer_ms(250, &debug_loop, NULL, &timer);
+    add_repeating_timer_ms(1000, &debug_loop, NULL, &timer);
 
     while(true){
         loops++;
